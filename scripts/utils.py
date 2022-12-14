@@ -45,9 +45,6 @@ def run(cmd: List[any], cwd: str = Path.cwd()) -> None:
     _thread = Thread(target=read_buffer, args=(process,))
     _thread.start()
     _thread.join()
-    out, err = process.communicate()
-    print(out.decode().strip())
-    print(err.decode().strip())
 
 
 def transform_to_absolute_path(path: str) -> str:
