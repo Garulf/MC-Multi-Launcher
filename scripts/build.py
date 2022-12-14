@@ -7,7 +7,7 @@ from env import python_path, run
 
 
 def build(python_path: str = "python", main_file: str = "src/run.py", icon: str = DEFAULT_ICON, data_files: List[DataFile] = None):
-    cmd = [python_path, '-m', 'nuitka', main_file,
+    cmd = ['python3', '-m', 'nuitka', main_file,
            '--assume-yes-for-downloads', '--standalone']
     if Path(icon).exists():
         cmd.append(f"--windows-icon-from-ico={icon}")
