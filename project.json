@@ -1,0 +1,17 @@
+{
+  "icon": "icon.png",
+  "data_files": [
+    {
+      "src": "src\\plugin.json=.",
+      "dest": "."
+    },
+    {
+      "src": "./src/SettingsTemplate.yaml",
+      "dest": "."
+    },
+    {
+      "src": "./src/mc_launcher/static/*.png",
+      "dest": "./mc_launcher/static/"
+    }
+  ]
+}
