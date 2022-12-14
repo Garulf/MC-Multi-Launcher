@@ -55,6 +55,8 @@ jobs:
           pip install -r ./requirements-dev.txt
       - name: Build
         run: |
+          pwd
+          ls
           python ./scripts/build.py
           python ./scripts/package.py
       - name: Get Plugin's version
