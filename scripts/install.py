@@ -1,16 +1,18 @@
 import json
 from shutil import copytree
 import os
+from pathlib import Path
 
 from manifest import FlowLauncherManifest
-from config import load_config, DEFAULT_MANIFEST, DEFAULT_LAUNCHER_DIR
+from config import load_config, DEFAULT_MANIFEST, DEFAULT_LAUNCHER_DIR, DEFAULT_SOURCE_DIR
 
 
 DIST_DIR = "plugin.dist"
 
 
-def get_plugin_name(plugin_manifest: str = DEFAULT_MANIFEST) -> str:
-    with open(plugin_manifest, "r") as f:
+def get_plugin_name(plugin_manifest: str = DEFAULT_MANIFEST, directory: str = DEFAULT_SOURCE_DIR) -> str:
+    full_path = Path(directory).joinpath(plugin_manifest)
+    with open(full_path, "r") as f:
         return json.load(f)["Name"]
 
 
