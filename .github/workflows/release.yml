@@ -55,10 +55,10 @@ jobs:
           pip install -r ./requirements-dev.txt
       - name: Build
         run: |
-          pwd
-          ls
           python ./scripts/build.py
           python ./scripts/package.py
+          pwd
+          ls
       - name: Get Plugin's version
         id: version
         uses: notiz-dev/github-action-json-property@release
