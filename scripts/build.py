@@ -1,13 +1,14 @@
 
 from pathlib import Path
 from typing import List, TypedDict
+import sys
 
 from config import DataFile, load_config, DEFAULT_ICON
 from env import python_path, run
 
 
-def build(python_path: str = "python", main_file: str = "src/run.py", icon: str = DEFAULT_ICON, data_files: List[DataFile] = None):
-    cmd = ['python3', '-m', 'nuitka', main_file,
+def build(main_file: str = "src/run.py", icon: str = DEFAULT_ICON, data_files: List[DataFile] = None):
+    cmd = [sys.executable, '-m', 'nuitka', main_file,
            '--assume-yes-for-downloads', '--standalone']
     if Path(icon).exists():
         cmd.append(f"--windows-icon-from-ico={icon}")
@@ -21,8 +22,7 @@ def build(python_path: str = "python", main_file: str = "src/run.py", icon: str 
 
 def main():
     config = load_config()
-    python = python_path(config.virtual_env)
-    build(python, config.main_file, config.icon, config.data_files)
+    build(config.main_file, config.icon, config.data_files)
 
 
 if __name__ == '__main__':
