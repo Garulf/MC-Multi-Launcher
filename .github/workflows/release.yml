@@ -73,8 +73,8 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           draft: false
-          files: "./staging/${{steps.version.outputs.prop}}.zip"
-          tag_name: "v${{steps.name.outputs.prop}}"
+          files: "./staging/${{steps.name.outputs.prop}}.zip"
+          tag_name: "v${{steps.version.outputs.prop}}"
           generate_release_notes: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
