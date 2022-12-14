@@ -20,7 +20,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
         with:
-          fetch-depth: 0
+          path: .
       - name: Set up Python ${{ env.PYTHON_VER }}
         uses: actions/setup-python@v2
         with:
