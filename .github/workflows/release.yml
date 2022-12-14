@@ -74,7 +74,7 @@ jobs:
         with:
           draft: false
           files: "./staging/${{steps.version.outputs.prop}}.zip"
-          tag_name: "v${{steps.version.outputs.prop}}"
+          tag_name: "v${{steps.name.outputs.prop}}"
           generate_release_notes: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
