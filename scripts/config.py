@@ -53,5 +53,6 @@ class Config:
 
 
 def load_config() -> Config:
+    print("Loading config")
     with open("project.json", "r") as f:
         return Config(**json.load(f))
