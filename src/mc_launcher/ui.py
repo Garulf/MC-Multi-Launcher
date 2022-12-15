@@ -1,5 +1,5 @@
 from flox import Flox
-from mc_launcher.launcher import MCLauncher, check_installed_launchers
+from mc_launcher.launcher import MCLauncher
 from mc_launcher.instance import Instance
 from mc_launcher.results import select_launcher, query_instances
 from mc_launcher.actions import OpenFileDialog

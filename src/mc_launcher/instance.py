@@ -53,10 +53,3 @@ class Instance:
             return humanize.naturaldelta(datetime.timedelta(
                 seconds=int(totalTimePlayed)), minimum_unit='seconds')
         return 'Never Played'
-
-
-if __name__ == '__main__':
-    i = Instance(r'F:\Minecraft\FTB Presents Direwolf20 1.12 2.9.0')
-    print(i.name)
-    print(i.last_played)
-    print(i.icon)

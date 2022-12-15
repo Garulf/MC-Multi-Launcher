@@ -107,14 +107,3 @@ class InstalledLauncher(MCLauncher):
         super().__init__(path)
         _name = Path(self.path).stem
         self.config = ROAMING.joinpath(_name, f"{_name}.cfg")
-
-
-if __name__ == '__main__':
-    # m = MCLauncher(r'F:\Minecraft\MultiMC')
-    # print(m.instance_dir)
-    # for i in m.instances():
-    #     print(i.name)
-    #     print(i.last_played)
-    #     print(i.icon)
-    _ = check_installed_launchers()
-    print(_)
