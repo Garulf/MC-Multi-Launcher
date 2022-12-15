@@ -12,6 +12,11 @@ def select_launcher(plugin: Flox):
             method='set_launcher_dir',
             parameters=[str(launcher.path)],
         )
+    plugin.add_item(
+        title='Please set your launcher path in the settings',
+        subtitle='Click here to open the settings',
+        method='open_setting_dialog'
+    )
 
 
 def query_instances(plugin: Flox, query: str):
