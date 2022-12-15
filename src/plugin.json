@@ -7,6 +7,6 @@
   "Version": "1.0.1",
   "Language": "executable",
   "Website": "https://github.com/Garulf/mc_multi_launcher",
-  "IcoPath": "./plugin.exe",
+  "IcoPath": "./icon.png",
   "ExecuteFileName": "plugin.exe"
 }

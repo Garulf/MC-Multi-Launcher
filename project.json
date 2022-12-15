@@ -2,12 +2,13 @@
   "icon": "icon.png",
   "data_files": [
     {
-      "src": "src\\plugin.json=.",
-      "dest": "."
+      "src": "src\\plugin.json=."
     },
     {
-      "src": "./src/SettingsTemplate.yaml",
-      "dest": "."
+      "src": "./src/SettingsTemplate.yaml"
+    },
+    {
+      "src": "./src/icon.png"
     },
     {
       "src": "./src/mc_launcher/static/*.png",
