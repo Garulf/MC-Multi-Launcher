@@ -4,7 +4,7 @@
   "Name": "MC Multi Launcher",
   "Description": "Launcher for MultiMC, PolyMC, and PrismLauncher",
   "Author": "Garulf",
-  "Version": "1.0.0",
+  "Version": "1.0.1",
   "Language": "executable",
   "Website": "https://github.com/Garulf/mc_multi_launcher",
   "IcoPath": "./plugin.exe",
