@@ -12,11 +12,6 @@ def select_launcher(plugin: Flox):
             method='set_launcher_dir',
             parameters=[str(launcher.path)],
         )
-    plugin.add_item(
-        title='Select a launcher directory',
-        subtitle='Select this to set a custom launcher directory',
-        method='open_file_dialog'
-    )
 
 
 def query_instances(plugin: Flox, query: str):
