@@ -4,7 +4,7 @@ from flox.string_matcher import string_matcher
 from mc_launcher.launcher import check_installed_launchers
 
 
-def select_launcher(plugin: Flox):
+def select_launcher(plugin: Flox, query: str):
     for launcher in check_installed_launchers():
         plugin.add_item(
             title=launcher.name,
@@ -17,6 +17,14 @@ def select_launcher(plugin: Flox):
         subtitle='Click here to open the settings',
         method='open_setting_dialog'
     )
+    if len(query) > 0:
+        plugin.add_item(
+            title='Set launcher path to "{}"'.format(query),
+            subtitle='Click here to set the launcher path to "{}"'.format(
+                query),
+            method='set_launcher_dir',
+            parameters=[query],
+        )
 
 
 def query_instances(plugin: Flox, query: str):
