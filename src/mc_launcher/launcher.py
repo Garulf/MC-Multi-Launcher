@@ -53,14 +53,16 @@ def check_installed_launchers() -> List['MCLauncher']:
     for launcher in LAUNCHER_FOLDERS:
         launcher_path = Path(LOCAL).joinpath('Programs', launcher)
         if launcher_path.exists():
-            installed_launchers.append(MCLauncher(launcher_path))
+            installed_launchers.append(
+                MCLauncher(launcher_path, name=launcher))
     return installed_launchers
 
 
 class MCLauncher:
 
-    def __init__(self, path):
+    def __init__(self, path: Path, name: str = None):
         self.path = path
+        self.name = name
         self.config = config.load(self._config())
 
     def _config(self):

@@ -7,7 +7,7 @@ from mc_launcher.launcher import check_installed_launchers
 def select_launcher(plugin: Flox):
     for launcher in check_installed_launchers():
         plugin.add_item(
-            title=launcher,
+            title=launcher.name,
             subtitle='Select this launcher to set it as the default',
             method='set_launcher_dir',
             parameters=[str(launcher.path)],
