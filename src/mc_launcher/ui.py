@@ -39,3 +39,7 @@ class MCMultiLauncher(Flox):
         instance = Instance(instance_path)
         self.mc_launcher.launch_instance(instance)
         self.show_msg('Launching instance', instance.name)
+
+    def open_launcher(self):
+        """This is used when a user clicks the plugin icon"""
+        self.mc_launcher.open()

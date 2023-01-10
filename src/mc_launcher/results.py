@@ -48,6 +48,5 @@ def no_instances(plugin: Flox):
             title='No instances found',
             subtitle='Please create an instance in your launcher',
             icon=str(COBWEB),
-            method='default_action',
-            parameters=[''],
+            method='open_launcher'
         )

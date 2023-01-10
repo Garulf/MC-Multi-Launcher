@@ -108,6 +108,11 @@ class MCLauncher:
         cmd = [str(exe), '-l', Path(instance.path).name]
         Popen(cmd, executable=path_to_exe, cwd=self.path)
 
+    def open(self):
+        exe = self.executable()
+        path_to_exe = Path(self.path).joinpath(exe)
+        cmd = [str(exe)]
+        Popen(cmd, executable=path_to_exe, cwd=self.path)
 
 class InstalledLauncher(MCLauncher):
 
