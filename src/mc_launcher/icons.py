@@ -19,6 +19,7 @@ NETHERSTAR = STATIC_DIR.joinpath('netherstar.png')
 SKELETON = STATIC_DIR.joinpath('skeleton.png')
 SQUARECREEPER = STATIC_DIR.joinpath('squarecreeper.png')
 STEVE = STATIC_DIR.joinpath('steve.png')
+COBWEB = STATIC_DIR.joinpath('cobweb.png')
 
 ICONS = {
     'chicken': CHICKEN,
@@ -36,5 +37,6 @@ ICONS = {
     'netherstar': NETHERSTAR,
     'skeleton': SKELETON,
     'squarecreeper': SQUARECREEPER,
-    'steve': STEVE
+    'steve': STEVE,
+    'cobweb': COBWEB,
 }
