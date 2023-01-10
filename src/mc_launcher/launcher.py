@@ -64,12 +64,20 @@ class MCLauncher:
         self.path = path
         self.name = name
         self.config = config.load(self._config())
+    
+    @property
+    def user_dir(self):
+        """
+        Get the user directory for the launcher
+
+        User data is kept in %AppData% when Launcher when an installer is used.
+        """
+        if str(self.path).startswith(str(LOCAL)):
+            return ROAMING.joinpath(Path(self.path).name)
+        return self.path
 
     def _config(self):
-        _path = self.path
-        if str(self.path).startswith(str(LOCAL)):
-            _path = ROAMING.joinpath(Path(self.path).name)
-        return Path(_path).glob('*.cfg').__next__()
+        return Path(self.user_dir).glob('*.cfg').__next__()
 
     def executable(self):
         executables = [exe for exe in Path(self.path).glob('*.exe')]
@@ -79,9 +87,9 @@ class MCLauncher:
 
     @property
     def instance_dir(self) -> Path:
-        instance_dir = self.config.get('InstanceDir')
+        instance_dir = self.config.get('InstanceDir', DEFAULT_INSTANCE_DIR)
         if instance_dir == DEFAULT_INSTANCE_DIR:
-            return Path(self.path).joinpath(instance_dir)
+            return Path(self.user_dir).joinpath(instance_dir)
         return Path(instance_dir)
 
     def instances(self) -> List[Instance]:
