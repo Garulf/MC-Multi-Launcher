@@ -2,6 +2,7 @@ from flox import Flox
 from flox.string_matcher import string_matcher
 
 from mc_launcher.launcher import check_installed_launchers
+from mc_launcher.icons import COBWEB
 
 
 def select_launcher(plugin: Flox, query: str):
@@ -38,4 +39,15 @@ def query_instances(plugin: Flox, query: str):
             score=int(score),
             method='default_action',
             parameters=[str(instance.path)],
+        )
+    no_instances(plugin)
+
+def no_instances(plugin: Flox):
+    if len(plugin._results) == 0:
+        plugin.add_item(
+            title='No instances found',
+            subtitle='Please create an instance in your launcher',
+            icon=str(COBWEB),
+            method='default_action',
+            parameters=[''],
         )
