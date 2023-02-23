@@ -82,6 +82,7 @@ class MCLauncher:
                 config = Path(dir).joinpath(cfg)
                 if config.exists():
                     return config
+        raise FileNotFoundError(f"Could not find config file for {self.name} in {self.path} or {self.user_dir}")
 
     def executable(self):
         executables = [exe for exe in Path(self.path).glob('*.exe')]
