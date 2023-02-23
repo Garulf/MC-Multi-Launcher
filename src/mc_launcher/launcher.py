@@ -72,12 +72,16 @@ class MCLauncher:
 
         User data is kept in %AppData% when Launcher when an installer is used.
         """
-        if str(self.path).startswith(str(LOCAL)):
-            return ROAMING.joinpath(Path(self.path).name)
-        return self.path
+        
+        return ROAMING.joinpath(Path(self.path).name)
 
     def _config(self):
-        return Path(self.user_dir).glob('*.cfg').__next__()
+        dirs = [self.path, self.user_dir]
+        for cfg in LAUNCHER_CFGS:
+            for dir in dirs:
+                config = Path(dir).joinpath(cfg)
+                if config.exists():
+                    return config
 
     def executable(self):
         executables = [exe for exe in Path(self.path).glob('*.exe')]
