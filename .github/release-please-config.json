@@ -1,0 +1,16 @@
+{
+  "$schema": "https://raw.githubusercontent.com/googleapis/release-please/main/schemas/config.json",
+  "release-type": "simple",
+  "packages": {
+    ".": {
+      "package-name": "MC-Multi-Launcher",
+      "extra-files": [
+        {
+          "type": "json",
+          "path": "data/plugin.json",
+          "jsonpath": "$.Version"
+        }
+      ]
+    }
+  }
+}

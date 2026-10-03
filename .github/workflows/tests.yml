@@ -1,0 +1,72 @@
+name: Tests
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ["3.8", "3.11", "3.12"]
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: astral-sh/setup-uv@v10.2.0
+
+      - name: Run tests
+        run: uvx --with tox-uv tox -e "py$(echo '${{ matrix.python }}' | tr -d .)"
+
+  readme:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: Garulf/readwright@v0.5.0
+        with:
+          mode: check
+          version: "==0.5.0"
+
+  package:
+    if: ${{ github.event_name == 'pull_request' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+
+      - name: Build plugin archive
+        id: build
+        env:
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          version="$(jq -r .Version data/plugin.json)-pr${PR_NUMBER}.${HEAD_SHA::7}"
+          zip_path="$RUNNER_TEMP/${{ github.event.repository.name }}-${version}.zip"
+          python scripts/build.py --dest "$RUNNER_TEMP/plugin" --zip "$zip_path"
+          echo "zip_path=$zip_path" >> "$GITHUB_OUTPUT"
+
+      - name: Upload plugin archive
+        id: upload
+        uses: actions/upload-artifact@v7
+        with:
+          path: ${{ steps.build.outputs.zip_path }}
+          archive: false
+          retention-days: 14
+
+      - name: Link the archive in the job summary
+        run: |
+          {
+            echo "### Test build"
+            echo
+            echo "[$(basename "${{ steps.build.outputs.zip_path }}")](${{ steps.upload.outputs.artifact-url }})"
+            echo
+            echo "Unzip into \`%APPDATA%\FlowLauncher\Plugins\` and restart Flow Launcher."
+          } >> "$GITHUB_STEP_SUMMARY"

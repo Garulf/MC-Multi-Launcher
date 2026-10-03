@@ -1,31 +1,40 @@
-
-from pathlib import Path
-from typing import List, TypedDict
+"""Stage the plugin with its dependencies and optionally zip it for release."""
+import argparse
+import shutil
+import subprocess
 import sys
+from pathlib import Path
 
-from config import DataFile, load_config, DEFAULT_ICON
-from env import python_path, run
-
-
-def build(main_file: str = "src/run.py", icon: str = DEFAULT_ICON, data_files: List[DataFile] = None):
-    cmd = [sys.executable, '-m', 'nuitka', main_file,
-           '--assume-yes-for-downloads', '--standalone']
-    if Path(icon).exists():
-        cmd.append(f"--windows-icon-from-ico={icon}")
-    if data_files is not None:
-        for data_file in data_files:
-            cmd.append(
-                f'--include-data-file={data_file["src"]}={data_file["dest"]}')
-    # print(f"Running {' '.join(cmd)}")
-    run(cmd)
+ROOT = Path(__file__).resolve().parent.parent
+DATA_FILES = ("plugin.json", "icon.png", "SettingsTemplate.yaml")
 
 
-def main():
-    config = load_config()
-    build(config.main_file, config.icon, config.data_files)
+def stage(dest: Path) -> Path:
+    shutil.rmtree(dest, ignore_errors=True)
+    shutil.copytree(ROOT / "src", dest, ignore=shutil.ignore_patterns("__pycache__", "*.pyc", "site-packages"))
+    for name in DATA_FILES:
+        shutil.copy2(ROOT / "data" / name, dest / name)
+    subprocess.run(
+        [sys.executable, "-m", "pip", "install", "--quiet", "--disable-pip-version-check", "--no-compile",
+         "--requirement", str(ROOT / "requirements.txt"),
+         "--target", str(dest / "plugin" / "site-packages")],
+        check=True,
+    )
+    return dest
 
 
-if __name__ == '__main__':
+def main() -> None:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--dest", type=Path, default=ROOT / "build" / "plugin", help="staging directory")
+    parser.add_argument("--zip", type=Path, help="write a release archive to this path")
+    args = parser.parse_args()
+
+    staged = stage(args.dest)
+    print(f"Staged {staged}")
+    if args.zip:
+        archive = shutil.make_archive(str(args.zip.with_suffix("")), "zip", staged)
+        print(f"Wrote {archive}")
+
+
+if __name__ == "__main__":
     main()
-    # bell
-    print('\a')
