@@ -1,0 +1,121 @@
+name: Release Please
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+  pull-requests: write
+
+env:
+  PYTHON_VER: "3.12"
+
+jobs:
+  release-please:
+    runs-on: ubuntu-latest
+    outputs:
+      release_created: ${{ steps.release.outputs.release_created }}
+      tag_name: ${{ steps.release.outputs.tag_name }}
+      version: ${{ steps.release.outputs.version }}
+      prs_created: ${{ steps.release.outputs.prs_created }}
+      pr: ${{ steps.release.outputs.pr }}
+    steps:
+      - uses: googleapis/release-please-action@v5
+        id: release
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          config-file: .github/release-please-config.json
+          manifest-file: .github/release-please-manifest.json
+
+  release:
+    needs: release-please
+    if: ${{ needs.release-please.outputs.release_created == 'true' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ needs.release-please.outputs.tag_name }}
+
+      - uses: actions/setup-python@v7
+        with:
+          python-version: ${{ env.PYTHON_VER }}
+
+      - name: Build plugin archive
+        id: build
+        env:
+          VERSION: ${{ needs.release-please.outputs.version }}
+        run: |
+          zip_path="$RUNNER_TEMP/${{ github.event.repository.name }}-${VERSION}.zip"
+          python scripts/build.py --dest "$RUNNER_TEMP/plugin" --zip "$zip_path"
+          echo "zip_path=$zip_path" >> "$GITHUB_OUTPUT"
+
+      - name: Upload archive to the release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release upload "${{ needs.release-please.outputs.tag_name }}" "${{ steps.build.outputs.zip_path }}"
+
+      - name: Delete pre-releases and their tags
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release list --json tagName,isPrerelease \
+            --jq '.[] | select(.isPrerelease) | .tagName' |
+          while read -r tag; do
+            gh release delete "$tag" --cleanup-tag --yes
+          done
+
+  prerelease:
+    needs: release-please
+    if: ${{ needs.release-please.outputs.prs_created == 'true' }}
+    runs-on: ubuntu-latest
+    concurrency:
+      group: prerelease
+      cancel-in-progress: true
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ fromJSON(needs.release-please.outputs.pr).headBranchName }}
+
+      - uses: actions/setup-python@v7
+        with:
+          python-version: ${{ env.PYTHON_VER }}
+
+      - name: Compute pre-release version
+        id: version
+        run: |
+          version="$(jq -r .Version data/plugin.json)-rc.${GITHUB_RUN_NUMBER}"
+          echo "tag=v${version}" >> "$GITHUB_OUTPUT"
+          echo "zip_path=$RUNNER_TEMP/${{ github.event.repository.name }}-${version}.zip" >> "$GITHUB_OUTPUT"
+
+      - name: Build plugin archive
+        run: python scripts/build.py --dest "$RUNNER_TEMP/plugin" --zip "${{ steps.version.outputs.zip_path }}"
+
+      - name: Create pre-release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ steps.version.outputs.tag }}
+          PR_NUMBER: ${{ fromJSON(needs.release-please.outputs.pr).number }}
+        run: |
+          {
+            echo "Test build of release PR #${PR_NUMBER}. It is replaced on every update to that PR and deleted once the release is published."
+            echo
+            gh pr view "$PR_NUMBER" --json body --jq .body
+          } > "$RUNNER_TEMP/notes.md"
+          gh release create "$TAG" "${{ steps.version.outputs.zip_path }}" \
+            --prerelease \
+            --target "$(git rev-parse HEAD)" \
+            --title "$TAG" \
+            --notes-file "$RUNNER_TEMP/notes.md"
+
+      - name: Delete older pre-releases
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ steps.version.outputs.tag }}
+        run: |
+          gh release list --json tagName,isPrerelease \
+            --jq ".[] | select(.isPrerelease and .tagName != \"$TAG\") | .tagName" |
+          while read -r tag; do
+            gh release delete "$tag" --cleanup-tag --yes
+          done
