@@ -1,5 +1,21 @@
 # Changelog
 
+## [2.0.0](https://github.com/Garulf/MC-Multi-Launcher/compare/MC-Multi-Launcher-v1.2.2...MC-Multi-Launcher-v2.0.0) (2026-10-03)
+
+
+### ⚠ BREAKING CHANGES
+
+* the plugin now runs on Flow Launcher's Python runtime (python_v2) instead of a bundled executable, and the "select a launcher" results are gone in favour of auto-detection.
+
+### Features
+
+* port to pyflowlauncher and the python_v2 runtime ([cbf4add](https://github.com/Garulf/MC-Multi-Launcher/commit/cbf4addfb828864b00334e5812f005f33c67ae13))
+
+
+### Bug Fixes
+
+* crashes after prismlauncher update ([7f7c7f8](https://github.com/Garulf/MC-Multi-Launcher/commit/7f7c7f863628739f7749090449e10f1c0ab31cd1))
+
 ## [1.2.2](https://github.com/Garulf/MC-Multi-Launcher/compare/v1.2.1...v1.2.2) (2024-07-01)
 
 ### Bug Fixes

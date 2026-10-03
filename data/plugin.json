@@ -4,7 +4,7 @@
   "Name": "Minecraft Multi Launcher",
   "Description": "Launch your Minecraft instances from MultiMC, PolyMC and Prism Launcher",
   "Author": "Garulf",
-  "Version": "1.2.2",
+  "Version": "2.0.0",
   "Language": "python_v2",
   "Website": "https://github.com/Garulf/MC-Multi-Launcher",
   "IcoPath": "icon.png",
