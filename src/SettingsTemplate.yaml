@@ -1,6 +1,0 @@
-body:
-  - type: input
-    attributes:
-      name: launcher_dir
-      label: "MultiMC Folder:"
-      defaultValue: ""

@@ -1,0 +1,13 @@
+body:
+  - type: textBlock
+    attributes:
+      name: description
+      description: >
+        MultiMC, PolyMC and Prism Launcher are found automatically. Only set a
+        launcher folder if yours is installed somewhere else.
+  - type: input
+    attributes:
+      name: launcher_dir
+      label: "Launcher folder:"
+      description: Folder containing the launcher's .exe (or the path to the .exe itself). Leave empty to detect it.
+      defaultValue: ""

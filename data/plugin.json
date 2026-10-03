@@ -1,0 +1,12 @@
+{
+  "ID": "91B97FA34859445782AEF1893DE4E350",
+  "ActionKeyword": "mc",
+  "Name": "Minecraft Multi Launcher",
+  "Description": "Launch your Minecraft instances from MultiMC, PolyMC and Prism Launcher",
+  "Author": "Garulf",
+  "Version": "1.2.2",
+  "Language": "python_v2",
+  "Website": "https://github.com/Garulf/MC-Multi-Launcher",
+  "IcoPath": "icon.png",
+  "ExecuteFileName": "run.py"
+}
