@@ -1,2 +1,2 @@
-pyflowlauncher[all]==1.2.1
+pyflowlauncher[all]==1.2.2
 humanize==4.10.0
