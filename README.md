@@ -26,7 +26,7 @@ Type `mc` to see your instances, most recently played first:
 mc
 ```
 
-![Minecraft instances listed in Flow Launcher](.github/assets/screenshot.png)
+![Minecraft instances listed in Flow Launcher](.github/assets/screenshot-light.png#gh-light-mode-only)![Minecraft instances listed in Flow Launcher](.github/assets/screenshot-dark.png#gh-dark-mode-only)
 
 Keep typing to search, then press `Enter` to launch:
 
@@ -34,7 +34,7 @@ Keep typing to search, then press `Enter` to launch:
 mc create
 ```
 
-![Searching Minecraft instances in Flow Launcher](.github/assets/search.png)
+![Searching Minecraft instances in Flow Launcher](.github/assets/search-light.png#gh-light-mode-only)![Searching Minecraft instances in Flow Launcher](.github/assets/search-dark.png#gh-dark-mode-only)
 
 ## Installation
 
@@ -46,12 +46,15 @@ In Flow Launcher, type:
 pm install minecraft multi launcher
 ```
 
-![Flow Launcher plugin manager installing Minecraft Multi Launcher](.github/assets/install.png)
+![Flow Launcher plugin manager installing Minecraft Multi Launcher](.github/assets/install-light.png#gh-light-mode-only)![Flow Launcher plugin manager installing Minecraft Multi Launcher](.github/assets/install-dark.png#gh-dark-mode-only)
 
 ### Manual installation
 
 Download the zip from the [latest release](https://github.com/Garulf/MC-Multi-Launcher/releases/latest) and unzip it into
 `%appdata%\FlowLauncher\Plugins`, then restart Flow Launcher.
+
+Pre-releases of the next version are published from the open release PR on the
+[releases page](https://github.com/Garulf/MC-Multi-Launcher/releases) for testing. Flow Launcher won't offer them as updates.
 
 ## Settings
 
@@ -69,4 +72,32 @@ tox -e readme          # re-render README.md
 python scripts/build.py --zip build/MC-Multi-Launcher.zip
 ```
 
-Release notes live in [CHANGELOG.md](CHANGELOG.md).
+## Changelog
+
+### [2.0.0](https://github.com/Garulf/MC-Multi-Launcher/compare/v1.2.2...v2.0.0) (2026-10-03)
+
+#### ⚠ BREAKING CHANGES
+
+* the plugin now runs on Flow Launcher's Python runtime (python_v2) instead of a bundled executable, and the "select a launcher" results are gone in favour of auto-detection.
+
+#### Features
+
+* port to pyflowlauncher and the python_v2 runtime ([cbf4add](https://github.com/Garulf/MC-Multi-Launcher/commit/cbf4addfb828864b00334e5812f005f33c67ae13))
+
+#### Bug Fixes
+
+* crashes after prismlauncher update ([7f7c7f8](https://github.com/Garulf/MC-Multi-Launcher/commit/7f7c7f863628739f7749090449e10f1c0ab31cd1))
+
+### [1.2.2](https://github.com/Garulf/MC-Multi-Launcher/compare/v1.2.1...v1.2.2) (2024-07-01)
+
+#### Bug Fixes
+
+* work with newer Prism Launcher config files ([#10](https://github.com/Garulf/MC-Multi-Launcher/pull/10))
+
+### [1.2.1](https://github.com/Garulf/MC-Multi-Launcher/compare/v1.2.0...v1.2.1) (2023-02-23)
+
+#### Bug Fixes
+
+* show an error message when the launcher config can't be found
+
+See [CHANGELOG.md](CHANGELOG.md) for the full history.

@@ -45,6 +45,9 @@ pm install minecraft multi launcher
 Download the zip from the [latest release]({{ project.url }}/releases/latest) and unzip it into
 `%appdata%\FlowLauncher\Plugins`, then restart Flow Launcher.
 
+Pre-releases of the next version are published from the open release PR on the
+[releases page]({{ project.url }}/releases) for testing. Flow Launcher won't offer them as updates.
+
 ## Settings
 
 The plugin looks for launchers in `%LOCALAPPDATA%\Programs`, `%LOCALAPPDATA%`, `%APPDATA%`,
@@ -61,7 +64,11 @@ tox -e readme          # re-render README.md
 python scripts/build.py --zip build/MC-Multi-Launcher.zip
 ```
 
-Release notes live in [CHANGELOG.md](CHANGELOG.md).
+## Changelog
+
+{{ changelog(3) }}
+
+See [CHANGELOG.md](CHANGELOG.md) for the full history.
 {% endblock %}
 
 {% block screenshots %}{% endblock %}
