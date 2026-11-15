@@ -1,4 +1,11 @@
-"""Render the README screenshots with flow-render against a demo Prism Launcher install."""
+"""Render the README screenshots with flow-render against a demo Prism Launcher install.
+
+Usage (from the repo root): tox -e screenshots, or with flow-render 0.15.0 installed:
+
+    python scripts/screenshots.py
+
+Every shot is written as <shot>-light.png and <shot>-dark.png, plus a single hero.png.
+"""
 import datetime
 import os
 import shlex
@@ -10,7 +17,7 @@ from pathlib import Path
 from build import ROOT, stage
 
 ASSETS = ROOT / ".github" / "assets"
-THEME = "win11-dark"
+THEMES = ("light", "dark")
 DAY = datetime.timedelta(days=1)
 
 DEMO_INSTANCES = (
@@ -22,11 +29,11 @@ DEMO_INSTANCES = (
 )
 
 SHOTS = {
-    "screenshot": ["-q", "", "-m", "5", "-s", THEME],
-    "search": ["-q", "create", "-m", "3", "-s", THEME],
-    "install": ["-i", "-s", THEME],
-    "hero": ["-q", "", "-m", "3", "-s", "hero-win11-dark", "-W", "1500", "-H", "560"],
+    "screenshot": ["-q", "", "-m", "5"],
+    "search": ["-q", "create", "-m", "3"],
+    "install": ["-i"],
 }
+HERO = ["-q", "", "-m", "3", "-s", "hero-win11-dark", "-W", "1500", "-H", "560"]
 
 
 def make_demo_install(home: Path) -> dict:
@@ -46,11 +53,12 @@ def make_demo_install(home: Path) -> dict:
     return {**os.environ, "LOCALAPPDATA": str(home / "Local"), "APPDATA": str(home / "Roaming")}
 
 
-def render(flow_render: list, plugin_dir: Path, args: list, env: dict, out_dir: Path) -> Path:
-    out_dir.mkdir()
-    subprocess.run([*flow_render, "-p", str(plugin_dir), "--hide-caret", "-o", str(out_dir), *args], env=env, check=True)
-    (image,) = out_dir.glob("*.png")
-    return image
+def render(flow_render: list, plugin_dir: Path, args: list, env: dict, out_path: Path) -> None:
+    with tempfile.TemporaryDirectory() as out_dir:
+        subprocess.run([*flow_render, "-p", str(plugin_dir), "--hide-caret", "-o", out_dir, *args], env=env, check=True)
+        (image,) = Path(out_dir).glob("*.png")
+        shutil.move(str(image), out_path)
+    print(f"Wrote {out_path}")
 
 
 def main() -> None:
@@ -61,9 +69,9 @@ def main() -> None:
         plugin_dir = stage(tmp_path / "plugin")
         env = make_demo_install(tmp_path / "home")
         for name, args in SHOTS.items():
-            image = render(flow_render, plugin_dir, args, env, tmp_path / name)
-            shutil.move(str(image), ASSETS / f"{name}.png")
-            print(f"Wrote {ASSETS / f'{name}.png'}")
+            for theme in THEMES:
+                render(flow_render, plugin_dir, [*args, "-s", f"win11-{theme}"], env, ASSETS / f"{name}-{theme}.png")
+        render(flow_render, plugin_dir, HERO, env, ASSETS / "hero.png")
 
 
 if __name__ == "__main__":

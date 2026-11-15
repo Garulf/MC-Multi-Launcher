@@ -7,6 +7,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 DATA_FILES = ("plugin.json", "icon.png", "SettingsTemplate.yaml")
+OLDEST_PYTHON = "3.8"
 
 
 def stage(dest: Path) -> Path:
@@ -14,13 +15,20 @@ def stage(dest: Path) -> Path:
     shutil.copytree(ROOT / "src", dest, ignore=shutil.ignore_patterns("__pycache__", "*.pyc", "site-packages"))
     for name in DATA_FILES:
         shutil.copy2(ROOT / "data" / name, dest / name)
+    vendor(dest / "plugin" / "site-packages")
+    return dest
+
+
+def vendor(target: Path) -> None:
+    # Pure-Python wheels resolved for the oldest supported Python, so the archive
+    # works with whichever Python 3.8+ Flow Launcher is configured to use.
     subprocess.run(
         [sys.executable, "-m", "pip", "install", "--quiet", "--disable-pip-version-check", "--no-compile",
          "--requirement", str(ROOT / "requirements.txt"),
-         "--target", str(dest / "plugin" / "site-packages")],
+         "--target", str(target),
+         "--only-binary=:all:", "--platform", "any", "--python-version", OLDEST_PYTHON, "--implementation", "py"],
         check=True,
     )
-    return dest
 
 
 def main() -> None:

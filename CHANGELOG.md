@@ -1,6 +1,6 @@
 # Changelog
 
-## [2.0.0](https://github.com/Garulf/MC-Multi-Launcher/compare/MC-Multi-Launcher-v1.2.2...MC-Multi-Launcher-v2.0.0) (2026-10-03)
+## [2.0.0](https://github.com/Garulf/MC-Multi-Launcher/compare/v1.2.2...v2.0.0) (2026-10-03)
 
 
 ### ⚠ BREAKING CHANGES
