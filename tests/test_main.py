@@ -1,4 +1,5 @@
 import asyncio
+import subprocess
 from pathlib import Path
 
 import pytest
@@ -122,10 +123,13 @@ def test_no_instances_offers_to_open_launcher(monkeypatch, tmp_path):
 def test_launch_instance_starts_launcher(monkeypatch, tmp_path):
     root = make_launcher(tmp_path / "MultiMC", "MultiMC.exe", {"base": "name=Base\n"})
     calls = []
-    monkeypatch.setattr(launcher, "Popen", lambda cmd, **kwargs: calls.append(cmd))
+    monkeypatch.setattr(launcher, "Popen", lambda cmd, **kwargs: calls.append((cmd, kwargs)))
 
     assert call("launch_instance", str(root / "MultiMC.exe"), "base") is None
-    assert calls == [[str(root / "MultiMC.exe"), "--launch", "base"]]
+    ((cmd, kwargs),) = calls
+    assert cmd == [str(root / "MultiMC.exe"), "--launch", "base"]
+    assert kwargs["cwd"] == root
+    assert kwargs["stdin"] == kwargs["stdout"] == kwargs["stderr"] == subprocess.DEVNULL
 
 
 def test_launch_with_missing_launcher_shows_message(tmp_path):
